@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>SVG Viewer</title>
+    <style>
+        html, body {
+            margin: 0;
+        }
+
+        body {
+            background: #252521;
+        }
+        
+        #canvas {
+            width: 1000px;
+            height: 1000px;
+            display: inline-block;
+            border: 50px solid #252521;
+            background: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <svg id="canvas" viewBox="0 0 1000 1000"></svg>
+    </div>
+
+    <script>
+        const filepath = /mock$/.test(location.hash) ?
+            './mock/figure.json' :
+            './figure.json';
+
+        fetch(filepath)
+            .then(response => console.log(response) || response.json())
+            .then(json => {
+                const $canvas = document.getElementById('canvas');
+
+                json.forEach(item => {
+                    // const $path = document.createElement('path');
+                    const $path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                    const d = `M${
+                        item.points.map(coord => `L${coord[0]},${coord[1]}`).join('')
+                    }z`.replace(/ML/, 'M');
+                    $path.setAttribute('d', d);
+                    $path.setAttribute('fill', item.color);
+                    $path.setAttribute('stroke', 'none');
+                    $canvas.appendChild($path);
+                });
+            });
+    </script>
+</body>
+</html>
