@@ -29,7 +29,7 @@
     </div>
 
     <script>
-        const filepath = /mock$/.test(location.hash) ?
+        const filepath = /mock/.test(location.hash) ?
             './mock/figure.json' :
             './figure.json';
 
@@ -46,8 +46,9 @@
                     const d = `M${
                         item.points.map(coord => `L${coord[0]},${coord[1]}`).join('')
                     }z`.replace(/ML/, 'M');
+                    const fill = /rgb/.test(location.hash) ? item.color : hsl(item.color);
                     $path.setAttribute('d', d);
-                    $path.setAttribute('fill', hsl(item.color));
+                    $path.setAttribute('fill', fill);
                     $path.setAttribute('stroke', 'none');
                     $canvas.appendChild($path);
                 });
